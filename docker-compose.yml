@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  postgres:
+    build: ./infra/postgres/.
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    secrets:
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+    volumes:
+      - airspace-data:/var/lib/postgresql/data
+    networks:
+      - airspace
+  gitasy2-rest-service:
+    container_name: gitasy2-rest-service
+    build: .
+    ports:
+      - "80:8080"
+    depends_on:
+      - postgres
+      - redis
+      - bitcoin
+    env_file: .env
+    restart: on-failure
+    networks:
+      - airspace
+networks:
+  airspace:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
+
+volumes:
+  airspace-data:
