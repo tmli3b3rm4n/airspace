@@ -1,13 +1,12 @@
-# Use the official PostgreSQL image for Linux amd64
-FROM postgres:latest
+# Base image with PostgreSQL and PostGIS
+FROM postgis/postgis:15-3.3
 
-# Set environment variables if needed
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
-ENV POSTGRES_DB=postgres
+# Install GDAL for loading GeoJSON
+RUN apt-get update && apt-get install -y gdal-bin && apt-get clean
 
-# Copy any additional configuration files if needed
-COPY pg_hba.conf /etc/postgresql/pg_hba.conf
+# Copy initialization script and GeoJSON file
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
 
-# Expose the PostgreSQL port
+
+# Expose PostgreSQL port
 EXPOSE 5432

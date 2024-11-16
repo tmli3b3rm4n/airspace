@@ -1,15 +1,13 @@
 package database
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"log"
 	"os"
-	"time"
 )
 
 type Database interface {
@@ -30,38 +28,32 @@ type Database interface {
 	AutoMigrate(dst ...interface{}) error
 	Begin(opts ...*sql.TxOptions) *gorm.DB
 	Commit() *gorm.DB
-	Update(model interface{}) error
+	Update(column string, value interface{}) (tx *gorm.DB)
 	Rollback() *gorm.DB
 	Exec(sql string, values ...interface{}) *gorm.DB
+	WithContext(ctx context.Context) (tx *gorm.DB)
 }
 
 const LOCAL = "local"
 
 func Connect() (Database, error) {
-	var db *gorm.DB
-	var err error
+	// Get environment variables for user and password
+	user := os.Getenv("POSTGRES_USER")
+	password := os.Getenv("POSTGRES_PASSWORD")
+	host := os.Getenv("POSTGRES_HOST")
+	dbname := os.Getenv("POSTGRES_DB")
 
-	if os.Getenv("ENV") == LOCAL {
-		db, err = gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	} else {
-		dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
-			os.Getenv("POSTGRES_HOST"), "5432", os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_DB"), os.Getenv("POSTGRES_PASSWORD"))
-		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if user == "" || password == "" || host == "" || dbname == "" {
+		log.Fatal("Missing necessary environment variables")
 	}
 
-	if err != nil {
-		logrus.Fatal(err)
-		return nil, err
-	}
+	// Construct the Data Source Name (DSN)
+	dsn := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=5432 sslmode=disable", user, password, dbname, host)
 
-	sqlDB, err := db.DB()
+	// Connect to the PostgresSQL database using GORM
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Printf("Unable to access gorm db. Error: %v", err)
 		return nil, err
-	} else {
-		sqlDB.SetMaxIdleConns(10)
-		sqlDB.SetMaxOpenConns(100)
-		sqlDB.SetConnMaxLifetime(time.Hour)
 	}
 
 	return db, nil
