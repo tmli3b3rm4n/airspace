@@ -36,6 +36,7 @@ type Database interface {
 
 const LOCAL = "local"
 
+// Connect establishes db connection
 func Connect() (Database, error) {
 	// Get environment variables for user and password
 	user := os.Getenv("POSTGRES_USER")
@@ -47,10 +48,8 @@ func Connect() (Database, error) {
 		log.Fatal("Missing necessary environment variables")
 	}
 
-	// Construct the Data Source Name (DSN)
 	dsn := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=5432 sslmode=disable", user, password, dbname, host)
 
-	// Connect to the PostgresSQL database using GORM
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
