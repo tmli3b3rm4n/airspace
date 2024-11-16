@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/tmli3b3rm4n/airspace/internal/database"
 	"github.com/tmli3b3rm4n/airspace/internal/database/models"
-	"log"
 )
 
 // IFlightRestrictions defines the interface for interacting with flight restriction data
@@ -40,6 +39,5 @@ func (f *FlightRestrictionsRepo) RestrictedAirspace(lat, lon float64) (bool, err
 	if count > 0 {
 		return true, nil
 	}
-	log.Printf("failed to query database for point (%f, %f): %v", lat, lon)
 	return false, nil
 }

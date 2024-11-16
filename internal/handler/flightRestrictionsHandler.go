@@ -1,16 +1,11 @@
 package handler
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/stretchr/testify/assert"
 	"github.com/tmli3b3rm4n/airspace/internal/repository"
 	"log"
 	"net/http"
-	"net/http/httptest"
 	"strconv"
-	"testing"
 )
 
 // FlightRestrictionsHandler handles flight restriction related requests
@@ -31,30 +26,6 @@ type Response struct {
 		Value    bool   `json:"value"`
 	} `json:"message"`
 	Error string `json:"error,omitempty"` // Optional error field
-}
-
-// TestRestrictedAirspace_ErrorFromRepository :
-func TestRestrictedAirspace_ErrorFromRepository(t *testing.T) {
-	e := echo.New()
-
-	mockRepo := new(repository.MockFlightRestrictionsRepo)
-	mockRepo.On("RestrictedAirspace", 32.20, -84.99).Return(false, fmt.Errorf("database error"))
-
-	handler := &FlightRestrictionsHandler{repo: mockRepo}
-	e.GET("/restricted-airspace/:lat/:lon", handler.RestrictedAirspace)
-
-	req := httptest.NewRequest(http.MethodGet, "/restricted-airspace/32.20/-84.99", nil)
-	rec := httptest.NewRecorder()
-
-	e.ServeHTTP(rec, req)
-
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
-
-	var response map[string]interface{}
-	err := json.NewDecoder(rec.Body).Decode(&response)
-	assert.NoError(t, err)
-
-	assert.Equal(t, "database error", response["error"])
 }
 
 // RestrictedAirspace checks if the provided coordinates are in restricted airspace
