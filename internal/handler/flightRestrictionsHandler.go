@@ -1,10 +1,16 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo/v4"
+	"github.com/stretchr/testify/assert"
 	"github.com/tmli3b3rm4n/airspace/internal/repository"
+	"log"
 	"net/http"
+	"net/http/httptest"
 	"strconv"
+	"testing"
 )
 
 // FlightRestrictionsHandler handles flight restriction related requests
@@ -27,13 +33,37 @@ type Response struct {
 	Error string `json:"error,omitempty"` // Optional error field
 }
 
+// TestRestrictedAirspace_ErrorFromRepository :
+func TestRestrictedAirspace_ErrorFromRepository(t *testing.T) {
+	e := echo.New()
+
+	mockRepo := new(repository.MockFlightRestrictionsRepo)
+	mockRepo.On("RestrictedAirspace", 32.20, -84.99).Return(false, fmt.Errorf("database error"))
+
+	handler := &FlightRestrictionsHandler{repo: mockRepo}
+	e.GET("/restricted-airspace/:lat/:lon", handler.RestrictedAirspace)
+
+	req := httptest.NewRequest(http.MethodGet, "/restricted-airspace/32.20/-84.99", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+
+	var response map[string]interface{}
+	err := json.NewDecoder(rec.Body).Decode(&response)
+	assert.NoError(t, err)
+
+	assert.Equal(t, "database error", response["error"])
+}
+
 // RestrictedAirspace checks if the provided coordinates are in restricted airspace
 func (f *FlightRestrictionsHandler) RestrictedAirspace(c echo.Context) error {
 	slat := c.Param("lat")
 	slon := c.Param("lon")
-	// You should convert lat and lon to float or check if they are valid numbers
-	lat, err := strconv.ParseFloat(slat, 64)
 
+	lat, err := strconv.ParseFloat(slat, 64)
+	log.Printf("slat : before parse %v,  %v", c.Param("lat"), slat)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid slat"})
 	}
@@ -43,7 +73,6 @@ func (f *FlightRestrictionsHandler) RestrictedAirspace(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid longitude"})
 	}
 
-	// Check if the point is within restricted airspace
 	isRestricted := false
 	isRestricted, err = f.repo.RestrictedAirspace(lat, lon)
 	if err != nil {
@@ -53,7 +82,6 @@ func (f *FlightRestrictionsHandler) RestrictedAirspace(c echo.Context) error {
 		})
 	}
 
-	// Return success response with the result
 	return c.JSON(http.StatusOK, Response{
 		Status: "success",
 		Message: struct {
