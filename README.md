@@ -35,8 +35,9 @@ The only prerequisite for testing is that you have gomock installed...
 The API was built using a combination of Go, Docker, and PostgreSQL to provide a scalable and maintainable solution for 
 handling flight restriction data.  The use of the Echo web framework allows for a straightforward implementation of 
 RESTful endpoints, and it provides built-in tools for routing and middleware management. The handler method uses the
-Echo framework to process the coordinates, validate them, and then query the mock repository for the restricted airspace
-status. This approach is lightweight and effective for handling real-time data requests.
+Echo framework to process the coordinates, validate them, and then query the database using the repository method for the
+restricted airspace status. This approach is lightweight and effective for handling real-time data requests.  For testing
+I use mock data which allows for testing handler locally.  
 
 Docker was employed to containerize the services, ensuring consistency across different environments. The Docker 
 Compose configuration defines the application stack, which consists of three primary services: the airspace-challenge API 
