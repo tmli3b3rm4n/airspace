@@ -3,6 +3,7 @@ module github.com/tmli3b3rm4n/airspace
 go 1.22
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/stretchr/testify v1.8.4
 	gorm.io/driver/postgres v1.5.9

@@ -32,6 +32,7 @@ type Database interface {
 	Rollback() *gorm.DB
 	Exec(sql string, values ...interface{}) *gorm.DB
 	WithContext(ctx context.Context) (tx *gorm.DB)
+	Count(value *int64) (tx *gorm.DB)
 }
 
 const LOCAL = "local"
