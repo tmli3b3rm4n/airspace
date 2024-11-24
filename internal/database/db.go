@@ -35,9 +35,6 @@ type Database interface {
 	Count(value *int64) (tx *gorm.DB)
 }
 
-const LOCAL = "local"
-
-// Connect establishes db connection
 func Connect() (Database, error) {
 	// Get environment variables for user and password
 	user := os.Getenv("POSTGRES_USER")

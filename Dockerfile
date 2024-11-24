@@ -1,36 +1,28 @@
-# Use official Golang image as a build stage
-FROM golang:1.22-alpine as builder
+ FROM golang:1.22-alpine as builder
 
-# Set the current working directory inside the container
-WORKDIR /app
+ WORKDIR /app
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
+ COPY go.mod go.sum ./
 
-# Download dependencies
-RUN go mod tidy
+ RUN go mod tidy
 
-# Copy the entire project
-COPY . .
+ COPY . .
 
-# Build the Go application
-RUN go build -o airspace_challenge cmd/airspace_challenge/main.go
+ RUN go build -o airspace_challenge cmd/airspace_challenge/main.go
 
-# Use the official Golang image for runtime
-FROM alpine:latest
+ FROM alpine:latest
 
-# Install necessary libraries (e.g., libpq for PostgreSQL)
-RUN apk add --no-cache libpq
+ RUN apk add --no-cache libpq bash curl
 
-# Set the working directory
-WORKDIR /root/
+ WORKDIR /root/
 
-# Copy the binary from the build stage
-COPY --from=builder /app/airspace_challenge .
-COPY infra/postgres/National_Security_UAS_Flight_Restrictions.geojson ./
+ COPY --from=builder /app/airspace_challenge .
+ COPY infra/postgres/National_Security_UAS_Flight_Restrictions.geojson ./
 
-# Expose the port your app will run on
-EXPOSE 8080
+ COPY wait-for-it.sh /usr/local/bin/wait-for-it
 
-# Command to run the application
-CMD ["./airspace_challenge"]
+ RUN chmod +x /usr/local/bin/wait-for-it
+
+ EXPOSE 8080
+
+ CMD ["wait-for-it", "postgres:5432", "--", "./airspace_challenge"]

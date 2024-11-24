@@ -17,6 +17,9 @@ services:
       - airspace
     restart: always
 
+  # uncomment volumes in postgres and run with data-loader
+  # service once then comment out data-loader if you want to persist postgres data.
+  # TODO: Load data with class.
   data-loader:
     build:
       context: cmd/data-loader/.
@@ -47,6 +50,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+      # uncomment if you want to persist the data to volume.
+#    volumes:
+#      - airspace-data:/var/lib/postgresql/data
 
 networks:
   airspace:

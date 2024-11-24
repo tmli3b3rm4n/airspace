@@ -21,7 +21,6 @@ The only prerequisite for testing is that you have gomock installed...
 1. From project root:
    2. `docker compose up --build`
       3. No Errors ? http://localhost:8080/restricted-airspace/32.3372/-84.9914 : Try again
-      4. **Note**: It may fail a few times until db is ready for connections but it will correct itself.  There are three services but one is used just to load data into database and then exits.
 
 ### Test Local
 1. Form root bash:

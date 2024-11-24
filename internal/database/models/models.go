@@ -5,13 +5,13 @@ import (
 	"fmt"
 )
 
+// PostgisGeometry : Geometry type
 type PostgisGeometry struct {
-	Geometry string // Store the geometry as WKT (Well-Known Text) or GeoJSON
+	Geometry string
 }
 
-// Implement the `Scanner` interface to read from the database
+// Scan : Implement the `Scanner` interface to read from the database
 func (g *PostgisGeometry) Scan(value interface{}) error {
-	// Convert the geometry field into a string (WKT or GeoJSON format)
 	switch v := value.(type) {
 	case string:
 		g.Geometry = v
@@ -21,13 +21,12 @@ func (g *PostgisGeometry) Scan(value interface{}) error {
 	}
 }
 
-// Implement the `Valuer` interface to write to the database
-func (g PostgisGeometry) Value() (driver.Value, error) {
-	// Return the geometry as a string to be written to the database
+// Value : Implement the `Valuer` interface to write to the database
+func (g *PostgisGeometry) Value() (driver.Value, error) {
 	return g.Geometry, nil
 }
 
-// Example struct with the custom type
+// FlightRestriction : FlightRestriction type
 type FlightRestriction struct {
 	ID          uint            `gorm:"primaryKey"`
 	Proponent   string          `gorm:"column:proponent"`
