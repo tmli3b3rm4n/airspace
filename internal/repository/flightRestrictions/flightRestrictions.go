@@ -1,4 +1,4 @@
-package repository
+package flightRestrictions
 
 import (
 	"fmt"
@@ -15,13 +15,13 @@ type IFlightRestrictions interface {
 // NewFlightRestrictionsRepo creates a new instance of FlightRestrictionsRepo
 func NewFlightRestrictionsRepo(db database.Database) IFlightRestrictions {
 	return &FlightRestrictionsRepo{
-		db: db,
+		DB: db,
 	}
 }
 
 // FlightRestrictionsRepo is the struct for handling flight restriction queries
 type FlightRestrictionsRepo struct {
-	db database.Database
+	DB database.Database
 }
 
 // RestrictedAirspace checks if the provided coordinates are inside restricted airspace
@@ -29,7 +29,7 @@ func (f *FlightRestrictionsRepo) RestrictedAirspace(lat, lon float64) (bool, err
 	var count int64
 
 	// Perform the query to check if the point is within restricxxted airspace
-	if err := f.db.Model(&models.FlightRestriction{}).Where(
+	if err := f.DB.Model(&models.FlightRestriction{}).Where(
 		"ST_Intersects(geom, ST_SetSRID(ST_MakePoint(?, ?), 4326))", lon, lat).
 		Count(&count).Error; err != nil {
 		return false, fmt.Errorf("failed to query database for point (%f, %f): %v", lat, lon, err)

@@ -1,7 +1,8 @@
-package repository
+package tests
 
 import (
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/tmli3b3rm4n/airspace/internal/repository/flightRestrictions"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"testing"
@@ -9,21 +10,21 @@ import (
 
 func TestRestrictedAirspace(t *testing.T) {
 	// Create a mock database
-	db, mock, err := sqlmock.New()
+	DB, mock, err := sqlmock.New()
 	if err != nil {
 		t.Fatalf("failed to create mock database: %v", err)
 	}
-	defer db.Close()
+	defer DB.Close()
 
 	// Wrap the mock DB in GORM
 	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
+		Conn: DB,
 	}), &gorm.Config{})
 	if err != nil {
 		t.Fatalf("failed to open GORM DB: %v", err)
 	}
 
-	repo := &FlightRestrictionsRepo{db: gormDB}
+	repo := &flightRestrictions.FlightRestrictionsRepo{DB: gormDB}
 
 	lat, lon := 40.7128, -74.0060
 	mock.ExpectQuery(`SELECT count\(\*\) FROM "flight_restrictions" WHERE ST_Intersects\(geom, ST_SetSRID\(ST_MakePoint\(\$1, \$2\), 4326\)\)`).

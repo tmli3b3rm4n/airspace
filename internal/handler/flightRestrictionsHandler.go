@@ -2,52 +2,35 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/tmli3b3rm4n/airspace/internal/repository"
+	"github.com/tmli3b3rm4n/airspace/internal/repository/flightRestrictions"
+	"github.com/tmli3b3rm4n/airspace/pkg/cords"
+	"github.com/tmli3b3rm4n/airspace/pkg/response"
 	"net/http"
-	"strconv"
 )
 
 // FlightRestrictionsHandler handles flight restriction related requests
 type FlightRestrictionsHandler struct {
-	repo repository.IFlightRestrictions
+	repo flightRestrictions.IFlightRestrictions
 }
 
 // NewFlightRestrictionsHandler creates a new handler
-func NewFlightRestrictionsHandler(repo repository.IFlightRestrictions) *FlightRestrictionsHandler {
+func NewFlightRestrictionsHandler(repo flightRestrictions.IFlightRestrictions) *FlightRestrictionsHandler {
 	return &FlightRestrictionsHandler{repo}
-}
-
-// Response represents the API response structure
-type Response struct {
-	Status  string `json:"status"`
-	Message struct {
-		Endpoint string `json:"endpoint"`
-		Value    bool   `json:"value"`
-	} `json:"message"`
-	Error string `json:"error,omitempty"` // Optional error field
 }
 
 // RestrictedAirspace checks if the provided coordinates are in restricted airspace
 func (f *FlightRestrictionsHandler) RestrictedAirspace(c echo.Context) error {
-	lat, err := strconv.ParseFloat(c.Param("lat"), 64)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid slat"})
-	}
-
-	lon, err := strconv.ParseFloat(c.Param("lon"), 64)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Invalid longitude"})
-	}
+	lat, lon, err := cords.GetLatLon(c)
 
 	isRestricted, err := f.repo.RestrictedAirspace(lat, lon)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, Response{
+		return c.JSON(http.StatusInternalServerError, response.Response{
 			Status: "error",
 			Error:  err.Error(),
 		})
 	}
 
-	return c.JSON(http.StatusOK, Response{
+	return c.JSON(http.StatusOK, response.Response{
 		Status: "success",
 		Message: struct {
 			Endpoint string `json:"endpoint"`

@@ -21,10 +21,7 @@ The only prerequisite for testing is that you have gomock installed...
 1. From project root:
    2. `docker compose up --build`
       3. No Errors ? http://localhost:8080/restricted-airspace/32.3372/-84.9914 : Try again
-     
-         4. **Note**:  expect these.. _airspace-challenge   | 2024/11/16 22:23:55 /app/internal/database/db.go:53
-            airspace-challenge   | [error] failed to initialize database, got error failed to connect to `host=postgres user=postgres database=postgres`: dial error (dial tcp 172.20.0.2:5432: connect: connection refused)
-            airspace-challenge   | 2024/11/16 22:23:55 failed to connect to `host=postgres user=postgres database=postgres`: dial error (dial tcp 172.20.0.2:5432: connect: connection refused)_
+
 
 ### Test Local
 1. Form root bash:
