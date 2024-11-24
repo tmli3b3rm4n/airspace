@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/tmli3b3rm4n/airspace/internal/repository/flightRestrictions"
-	"github.com/tmli3b3rm4n/airspace/pkg/cords"
+	"github.com/tmli3b3rm4n/airspace/pkg/parse"
 	"github.com/tmli3b3rm4n/airspace/pkg/response"
-	"net/http"
+	"github.com/tmli3b3rm4n/airspace/pkg/util"
 )
 
 // FlightRestrictionsHandler handles flight restriction related requests
@@ -18,10 +20,33 @@ func NewFlightRestrictionsHandler(repo flightRestrictions.IFlightRestrictions) *
 	return &FlightRestrictionsHandler{repo}
 }
 
-// RestrictedAirspace checks if the provided coordinates are in restricted airspace
 func (f *FlightRestrictionsHandler) RestrictedAirspace(c echo.Context) error {
-	lat, lon, err := cords.GetLatLon(c)
+	// Parse and validate lat/lon
+	lat, lon, err := parse.ParseLatLon(c)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, response.Response{
+			Status: "invalid latitude or longitude.",
+			Error:  "failed to parse latitude or longitude.",
+		})
+	}
 
+	// Validate latitude
+	if !util.IsValidLatitude(lat) {
+		return c.JSON(http.StatusBadRequest, response.Response{
+			Status: "invalid latitude.",
+			Error:  "latitude out of range.",
+		})
+	}
+
+	// Validate longitude
+	if !util.IsValidLongitude(lon) {
+		return c.JSON(http.StatusBadRequest, response.Response{
+			Status: "invalid longitude.",
+			Error:  "longitude out of range.",
+		})
+	}
+
+	// Check repository for restricted airspace
 	isRestricted, err := f.repo.RestrictedAirspace(lat, lon)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, response.Response{
