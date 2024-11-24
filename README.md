@@ -22,34 +22,24 @@ The only prerequisite for testing is that you have gomock installed...
    2. `docker compose up --build`
       3. No Errors ? http://localhost:8080/restricted-airspace/32.3372/-84.9914 : Try again
 
-
 ### Test Local
 1. Form root bash:
-   2. `go test ./...`
+2.    `go test ./...`
 
 
 ### How it works:  
-The API was built using a combination of Go, Docker, and PostgreSQL to provide a scalable and maintainable solution for 
-handling flight restriction data.  The use of the Echo web framework allows for a straightforward implementation of 
-RESTful endpoints, and it provides built-in tools for routing and middleware management. The handler method uses the
-Echo framework to process the coordinates, validate them, and then query the mock repository for the restricted airspace
-status. This approach is lightweight and effective for handling real-time data requests.
+The API is built using Go, Docker, and PostgreSQL to manage flight restriction data. Echo framework handles RESTful endpoints, providing routing and middleware tools. The handler method processes coordinates, validates them, and queries the database for restricted airspace status. For testing, mock data is used to test handlers locally.
 
-Docker was employed to containerize the services, ensuring consistency across different environments. The Docker 
-Compose configuration defines the application stack, which consists of three primary services: the airspace-challenge API 
-service, the data-loader service for populating the database with flight data, and the postgres service for storing data.
-Docker simplifies the deployment process by encapsulating the application and its dependencies into isolated containers,
+Docker is used to containerize services, ensuring environment consistency. The stack includes the API service, a data-loader for populating the database, and a PostgreSQL service. Docker Compose handles deployment across containers.
 
-The API also relies on the PostGIS extension for PostgreSQL, which enables spatial data processing and geographic 
-queries. PostGIS is a powerful spatial database extension that allows PostgreSQL to handle geographic objects, such as
-points, polygons, and lines, which is essential for this API's functionality, specifically when working with flight 
-restriction zones.
+PostGIS, an extension for PostgreSQL, enables spatial data processing and geographic queries. It supports geographic objects like points, polygons, and lines, critical for working with flight restriction zones. The ST_Intersects function is used to check if a point intersects with any restricted airspace zone, allowing efficient geospatial queries.
 
-The core feature utilized here is the ability to store and query spatial data using PostGIS functions like 
-ST_Intersects. This function allows the API to determine if a specific point (representing a location on the Earth, 
-defined by latitude and longitude) intersects with any defined restricted airspace area stored in the database. 
-By leveraging PostGIS, I'm able to efficiently perform geospatial queries, such as checking whether a given set of 
-coordinates lies within a restricted airspace zone.
+
+
+
+
+
+
 
 ### What features would I add to this.
 
@@ -59,6 +49,7 @@ coordinates lies within a restricted airspace zone.
 3. **Real-Time Alerts:** Add a system for notifying users when a specific area becomes restricted or when an existing restriction is lifted. Notifications could be pushed to users via email or SMS.
 4. **Geospatial Visualization:** Allow users to visualize flight restrictions on a map via a web interface. This could be useful for external systems that need to display real-time information about restricted airspace on a map.
 5. **API Keys:** Implement API key-based authentication to ensure that only authorized users can access certain parts of the API.
+6. **Github Actions**
 
 
 ### Full log of successful build... 
