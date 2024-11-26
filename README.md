@@ -3,7 +3,10 @@
 
 #### OBJECTIVE: 
 Using N_S_UAS_Flight_Restriction data create a api that takes a lat long and responds with message revealing if cords
-are in restricted airspace or not. 
+are in restricted airspace or not.   While not technically required I added a react application that uses maps and the
+provided geometry to draw restricted airspace over them.  It consumes the go api create.  You can click
+on map to collect cords and then check them against the api.  Also just to note: I wouldn't normally include the frontend
+as i did here but i wanted it to be as single step as possible for you guys to run. 
 
 ### PRE-Reqs
 #### Required To Run:
@@ -21,6 +24,7 @@ The only prerequisite for testing is that you have gomock installed...
 1. From project root:
    2. `docker compose up --build`
       3. No Errors ? http://localhost:8080/restricted-airspace/32.3372/-84.9914 : Try again
+      4. http://localhost:3005/
 
 ### Test Local
 1. Form root bash:
