@@ -26,7 +26,7 @@ services:
       dockerfile: Dockerfile
     container_name: data-loader
     ports:
-      - "5000:5000"
+      - "5003:5000"
     depends_on:
       - postgres
     env_file:
@@ -40,7 +40,7 @@ services:
     build:
       context: infra/postgres/.
       dockerfile: Dockerfile
-    ports:
+    ports:  
       - "5432:5432"
     env_file:
       - .env
@@ -53,6 +53,19 @@ services:
       # uncomment if you want to persist the data to volume.
 #    volumes:
 #      - airspace-data:/var/lib/postgresql/data
+
+  react-app:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    container_name: react-app
+    ports:
+      - "3005:80"
+    depends_on:
+      - airspace-challenge
+    networks:
+      - airspace
+    restart: always
 
 networks:
   airspace:
