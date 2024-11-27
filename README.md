@@ -22,9 +22,10 @@ The only prerequisite for testing is that you have gomock installed...
 ### Run Local Build
 
 1. From project root:
-   2. `docker compose up --build`
-      3. No Errors ? http://localhost:8080/restricted-airspace/32.3372/-84.9914 : Try again
-      4. http://localhost:3005/
+2. `docker compose up --build`
+3. No Errors ? http://localhost:8080/restricted-airspace/32.3372/-84.9914 : Try again
+4. Frontend
+5. http://localhost:3005/
 
 ### Test Local
 1. Form root bash:
