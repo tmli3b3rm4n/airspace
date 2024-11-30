@@ -2,36 +2,35 @@
 ### TIM LIEBERMAN   : )
 
 #### OBJECTIVE: 
-Using N_S_UAS_Flight_Restriction data create a api that takes a lat long and responds with message revealing if cords
-are in restricted airspace or not.   While not technically required I added a react application that uses maps and the
-provided geometry to draw restricted airspace over them.  It consumes the go api create.  You can click
-on map to collect cords and then check them against the api.  Also just to note: I wouldn't normally include the frontend
-as i did here but i wanted it to be as single step as possible for you guys to run. 
+Using the National_Security_UAS_Flight_Restrictions.geojson data, I created an API that takes latitude and longitude as inputs and responds with a message indicating whether the coordinates fall within restricted airspace. While not strictly necessary, I also built a React application with a map feature that displays the restricted airspace using the provided geometry. The React app consumes the Go API and allows users to click on the map to select coordinates, which can then be checked against the API. Although I wouldn't normally include the frontend in such a project, I wanted to make it as straightforward as possible for you to run.
 
-### PRE-Reqs
-#### Required To Run:
+#### Prerequisites
 I'm presuming you already have these tools installed but if not i've provided some psuedo installs.  They might be accurate.
 
 - `brew install docker`
 - `brew install go`
 
+#### Installing
+- `mkdir -pv ~go/src/github.com/tmli3b3rm4n/ && cd ~go/src/github.com/tmli3b3rm4n && git clone git@github.com:tmli3b3rm4n/airspace.git && cd airspace`
+
 #### Testing: 
 The only prerequisite for testing is that you have gomock installed... 
 - ```go install github.com/golang/mock/mockgen@latest```
 
-### Run Local Build
+#### Run Local Build
 * `docker compose up --build`
-* http://localhost:8080/restricted-airspace/32.3372/-84.9914
-## Frontend
+*  sanity check  http://localhost:8080/restricted-airspace/32.3372/-84.9914
+
+#### Frontend
 * 'http://localhost:3005/'
 
-### Tests
+#### Tests
 Tests are designed to run in any environment—local, cloud, or otherwise. I achieve this by using interfaces to mock the database, which abstracts the application logic from the actual database implementation. 
 
 * `go test ./...`
 
 
-### How it works:  
+#### How it works:  
 The API is built using Go, Docker, and PostgreSQL to manage flight restriction data. Echo framework handles RESTful endpoints, providing routing and middleware tools. The handler method processes coordinates, validates them, and queries the database for restricted airspace status. For testing, mock data is used to test handlers locally.
 
 Docker is used to containerize services, ensuring environment consistency. The stack includes the API service, a data-loader for populating the database, and a PostgreSQL service. Docker Compose handles deployment across containers.
