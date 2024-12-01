@@ -11,7 +11,7 @@ I'm presuming you already have these tools installed but if not i've provided so
 - `brew install go`
 
 #### Installing
-- `mkdir -pv ~go/src/github.com/tmli3b3rm4n/ && cd ~go/src/github.com/tmli3b3rm4n && git clone git@github.com:tmli3b3rm4n/airspace.git && cd airspace`
+- `mkdir -pv ~/go/src/github.com/tmli3b3rm4n/ && cd ~/go/src/github.com/tmli3b3rm4n && git clone git@github.com:tmli3b3rm4n/airspace.git && cd airspace`
 
 #### Testing: 
 The only prerequisite for testing is that you have gomock installed... 
