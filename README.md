@@ -1,6 +1,16 @@
 # AIRSPACE DEMO API
 
 #### OBJECTIVE: 
+Go Engineering Challenge:
+- Download the following dataset as GeoJSON - https://udds-faa.opendata.arcgis.com/datasets/faa::national-security-uas-flight-restrictions-1/explore - This is the offical FAA dataset for the National Security UAS Flight Restrictions.  It contains collection of polygons representing the boundaries of areas that a drone operator cannot fly a drone.
+- Create an API endpoint that accepts a latitude and longitude and returns a positive or negative response indicating whether a drone operator can fly a drone at that location.
+- You must right the API code using Go, but you are free to decide how to model that API: Rest or gRPC is an acceptable solution.
+- Provide documentation on how to run the application.
+
+Don't spend too much time optimizing your code, but think about what possible enhancements you would make to it.
+Submit your code via any means to kelly.bigley@airspacelink.com .  If you decide to prepare a repository online (ie: Github), please do NOT make it public.  Rather keep the repository private and send an invitation as a collaborator.
+
+#### Solution
 Using the National_Security_UAS_Flight_Restrictions.geojson data, I created an API that takes latitude and longitude as inputs and responds with a message indicating whether the coordinates fall within restricted airspace. While not strictly necessary, I also built a React application with a map feature that displays the restricted airspace using the provided geometry. The React app consumes the Go API and allows users to click on the map to select coordinates, which can then be checked against the API. Although I wouldn't normally include the frontend in such a project, I wanted to make it as straightforward as possible for you to run.
 
 #### Prerequisites
