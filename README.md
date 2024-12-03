@@ -1,5 +1,5 @@
 # AIRSPACE DEMO API
-<img width="1728" alt="Screenshot 2024-12-03 at 12 59 16 AM" src="https://github.com/user-attachments/assets/defbbca5-82d8-4b3b-84fe-d68d28a5ca00">
+
 
 #### OBJECTIVE: 
 Go Engineering Challenge:
@@ -63,3 +63,5 @@ Tests are designed to run in any environment—local, cloud, or otherwise. I ach
 4. **Geospatial Visualization:** Allow users to visualize flight restrictions on a map via a web interface. This could be useful for external systems that need to display real-time information about restricted airspace on a map.
 5. **API Keys:** Implement API key-based authentication to ensure that only authorized users can access certain parts of the API.
 6. **Github Actions:**  This would be the next thing I would add.   
+
+<img width="1728" alt="Screenshot 2024-12-03 at 12 59 16 AM" src="https://github.com/user-attachments/assets/defbbca5-82d8-4b3b-84fe-d68d28a5ca00">
