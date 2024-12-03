@@ -17,13 +17,13 @@ I'm presuming yo already have these tools installed but if not i've provided som
 The only prerequisite for testing is that you have gomock installed... 
 - `go install github.com/golang/mock/mockgen@latest`
 
+#### Swagger Docs
+ * `go install github.com/swaggo/swag/cmd/swag@latest`
+ * `swag init -g cmd/airspace_challenge/main.go`
+
 #### Run Local Build
 * `docker compose up --build`
 *  sanity check  http://localhost:8080/restricted-airspace/32.3372/-84.9914
-
-#### Swagger Docs
-* `go install github.com/swaggo/swag/cmd/swag@latest`
-* `swag init -g cmd/airspace_challenge/main.go`
 * http://localhost:8080/swagger//index.html#/
 
 #### Frontend
