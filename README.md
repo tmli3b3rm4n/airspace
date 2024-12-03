@@ -21,6 +21,9 @@ The only prerequisite for testing is that you have gomock installed...
 * `docker compose up --build`
 *  sanity check  http://localhost:8080/restricted-airspace/32.3372/-84.9914
 
+#### Swagger Docs
+*   http://localhost:8080/swagger//index.html#/
+
 #### Frontend
 * 'http://localhost:3005/'
 

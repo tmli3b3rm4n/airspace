@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
+	_ "github.com/tmli3b3rm4n/airspace/docs"
 	"github.com/tmli3b3rm4n/airspace/internal/database"
 	"github.com/tmli3b3rm4n/airspace/internal/handler"
 	"github.com/tmli3b3rm4n/airspace/internal/repository/flightRestrictions"
-	"log"
 )
 
 func main() {
@@ -30,7 +33,7 @@ func main() {
 	flightRestrictionHandler := handler.NewFlightRestrictionsHandler(flightRestrictionRepo)
 
 	e.GET("/restricted-airspace/:lat/:lon", flightRestrictionHandler.RestrictedAirspace)
-
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	fmt.Println("Server running on port 8080")
 	e.Logger.Fatal(e.Start(":8080"))
 }
