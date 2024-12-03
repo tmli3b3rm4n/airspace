@@ -20,6 +20,18 @@ func NewFlightRestrictionsHandler(repo flightRestrictions.IFlightRestrictions) *
 	return &FlightRestrictionsHandler{repo}
 }
 
+// FlightRestrictionsHandler handles flight restriction related requests
+// @Summary      Get restricted airspace status
+// @Description  Check if the given latitude and longitude fall within restricted airspace
+// @Tags         FlightRestrictions
+// @Accept       json
+// @Produce      json
+// @Param        lat   path      float64  true  "Latitude"
+// @Param        lon   path      float64  true  "Longitude"
+// @Success      200  {object}  response.Response
+// @Failure      400  {object}  response.Response
+// @Failure      500  {object}  response.Response
+// @Router       /restricted-airspace/{lat}/{lon} [get]
 func (f *FlightRestrictionsHandler) RestrictedAirspace(c echo.Context) error {
 	// Parse and validate lat/lon
 	lat, lon, err := parse.ParseLatLon(c)

@@ -7,6 +7,9 @@
  RUN go mod tidy
 
  COPY . .
+ RUN go install github.com/swaggo/swag/cmd/swag@latest
+
+ RUN swag init -g cmd/airspace_challenge/main.go
 
  RUN go build -o airspace_challenge cmd/airspace_challenge/main.go
 
