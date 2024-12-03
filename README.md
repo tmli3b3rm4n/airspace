@@ -1,11 +1,10 @@
 # AIRSPACE DEMO API
-### TIM LIEBERMAN   : )
 
 #### OBJECTIVE: 
 Using the National_Security_UAS_Flight_Restrictions.geojson data, I created an API that takes latitude and longitude as inputs and responds with a message indicating whether the coordinates fall within restricted airspace. While not strictly necessary, I also built a React application with a map feature that displays the restricted airspace using the provided geometry. The React app consumes the Go API and allows users to click on the map to select coordinates, which can then be checked against the API. Although I wouldn't normally include the frontend in such a project, I wanted to make it as straightforward as possible for you to run.
 
 #### Prerequisites
-I'm presuming yo already have these tools installed but if not i've provided some psuedo installs.  They might be accurate.
+I'm presuming you already have these tools installed but if not i've provided installs.
 
 - `brew install docker`
 - `brew install go`
